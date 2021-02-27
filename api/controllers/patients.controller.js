@@ -42,6 +42,14 @@ exports.getPatients = (req, res) => {
     .catch((err) => res.status(500).json(err))
 }
 
+exports.getPatientById = (req, res) => {
+  Patient.findById(req.params.patientId)
+    .then((patient) => {
+      res.status(200).send(patient)
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
 exports.updatePatient = (req, res) => {
   Patient.findByIdAndUpdate(req.params.patientId, req.body, {
     new: true,
