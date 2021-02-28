@@ -25,19 +25,15 @@ exports.createPatient = (req, res) => {
   }
 }
 
-// {
-//     "firstName": "Juanito3",
-//     "lastName": "Grillo2",
-//     "dni":"11222221B",
-//     "email": "sjmgruerg@prueba.com",
-//     "mobilephone":666112231,
-//     "telephone": 928467781,
-//     "bloodType": "A+",
-//     "observations": "Esta sano"
-// }
-
 exports.getPatients = (req, res) => {
   Patient.find()
+    .select({
+      _id: 1,
+      dni: 1,
+      firstName: 1,
+      lastName: 1,
+      'contact.mobilephone': 1,
+    })
     .then((patients) => res.status(200).send(patients))
     .catch((err) => res.status(500).json(err))
 }

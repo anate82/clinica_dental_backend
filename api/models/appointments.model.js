@@ -4,19 +4,21 @@ const appointmentSchema = new mongoose.Schema({
   patient: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'patient',
+    required: true,
   },
-  // doctor: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'doctor',
-  // },
+  employees: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'employee',
+      required: true,
+    },
+  ],
   start: {
     type: Date,
-    default: Date.now(),
     required: true,
   },
   end: {
     type: Date,
-    default: Date.now(),
     required: true,
   },
   intervention: {
