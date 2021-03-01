@@ -1,19 +1,26 @@
 const Appointment = require('../models/appointments.model')
 const ObjectId = require('mongodb').ObjectId
+const {
+  findTreatmentId,
+  createTreatment,
+  deleteAppointmentTreatment,
+} = require('./treatments.controller')
 
 exports.createAppointment = (req, res) => {
   Appointment.create({
-    patient: ObjectId(req.body.patient),
+    patient: ObjectId(req.body.patientId),
     start: req.body.start,
     end: req.body.end,
-    intervention: req.body.intervention,
     piece: req.body.piece,
     observations: req.body.observations,
     medicines: req.body.medicines,
-    finished: req.body.finished,
   })
     .then((appointment) => {
-      res.status(200).send(appointment)
+      if (req.body.treatmentId) {
+        findTreatmentId(req, res, appointment._id)
+      } else {
+        createTreatment(req, res, appointment._id)
+      }
     })
     .catch((err) => res.status(500).json(err))
 }
@@ -28,8 +35,8 @@ exports.updateAppointment = (req, res) => {
 
 exports.deleteAppointment = (req, res) => {
   Appointment.findByIdAndDelete(req.params.appointmentId)
-    .then((response) => {
-      res.status(200).send(response)
+    .then((appointment) => {
+      deleteAppointmentTreatment(req, res, appointment._id)
     })
     .catch((err) => console.log(err))
 }

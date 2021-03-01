@@ -1,10 +1,7 @@
 const Patient = require('../models/patients.model')
 
 exports.createPatient = (req, res) => {
-  console.log(req.body)
-  console.log('entro en el controller')
   if (req.body) {
-    console.log('entro en el if')
     Patient.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -18,7 +15,6 @@ exports.createPatient = (req, res) => {
       observations: req.body.observations,
     })
       .then((patient) => {
-        console.log('then')
         res.status(200).send(patient)
       })
       .catch((err) => res.status(500).json(err))

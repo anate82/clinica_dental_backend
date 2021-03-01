@@ -21,11 +21,6 @@ const appointmentSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  intervention: {
-    type: String,
-    required: true,
-    enum: ['Empaste', 'Ortodoncia', 'Endodoncia'],
-  },
   piece: {
     type: Number,
   },
