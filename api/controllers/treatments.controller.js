@@ -1,9 +1,9 @@
-const Treatments = require('../models/treatments.model')
+const Treatment = require('../models/treatments.model')
 const ObjectId = require('mongodb').ObjectId
 
 exports.createTreatment = (req, res, id) => {
   if (req.body) {
-    Treatments.create({
+    Treatment.create({
       patient: ObjectId(req.body.patientId),
       description: req.body.description,
       finished: req.body.finished,
@@ -18,7 +18,7 @@ exports.createTreatment = (req, res, id) => {
 }
 
 exports.findTreatmentId = (req, res, id) => {
-  Treatments.findOne({ _id: req.body.treatmentId })
+  Treatment.findOne({ _id: req.body.treatmentId })
     .then((treatment) => {
       treatment.appointments.unshift(ObjectId(id))
       treatment.save(function (err) {
@@ -30,7 +30,7 @@ exports.findTreatmentId = (req, res, id) => {
 }
 
 const deleteTreatment = (req, res, id) => {
-  Treatments.findByIdAndDelete(id)
+  Treatment.findByIdAndDelete(id)
     .then((treatment) => {
       res.status(200).json(treatment)
     })
@@ -38,7 +38,7 @@ const deleteTreatment = (req, res, id) => {
 }
 
 exports.deleteAppointmentTreatment = (req, res, id) => {
-  Treatments.findOne({ _id: req.body.treatmentId }).then((treatment) => {
+  Treatment.findOne({ _id: req.body.treatmentId }).then((treatment) => {
     let idx = treatment.appointments.indexOf(id)
     treatment.appointments.splice(idx, 1)
     treatment.save(function (err) {

@@ -13,7 +13,7 @@ exports.createAppointment = (req, res) => {
     end: req.body.end,
     piece: req.body.piece,
     observations: req.body.observations,
-    medicines: req.body.medicines,
+    medication: req.body.medication,
   })
     .then((appointment) => {
       if (req.body.treatmentId) {

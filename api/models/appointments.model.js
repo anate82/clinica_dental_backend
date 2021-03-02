@@ -27,7 +27,7 @@ const appointmentSchema = new mongoose.Schema({
   observations: {
     type: String,
   },
-  medicines: {
+  medication: {
     type: String,
   },
   finished: {
