@@ -35,6 +35,10 @@ exports.getPatients = (req, res) => {
 }
 
 exports.getPatientsByQuery = (req, res) => {
+  const { page = 1, limit = 10 } = req.query
+  console.log('limit', limit * 1)
+  console.log('page', (page - 1) * limit)
+  console.log('query')
   Patient.find({
     $or: [
       { firstName: { $regex: req.query.input, $options: 'i' } },
@@ -43,7 +47,8 @@ exports.getPatientsByQuery = (req, res) => {
       { 'contact.mobilephone': { $regex: req.query.input, $options: 'i' } },
     ],
   })
-    .limit(10)
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
     .select({
       _id: 1,
       dni: 1,
@@ -51,7 +56,15 @@ exports.getPatientsByQuery = (req, res) => {
       lastName: 1,
       'contact.mobilephone': 1,
     })
-    .then((patients) => res.status(200).send(patients))
+    .then((patients) => {
+      const count = patients.length
+      console.log('patientssss', patients)
+      res.status(200).json({
+        patients: patients,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+      })
+    })
     .catch((err) => res.status(500).json(err))
 }
 
