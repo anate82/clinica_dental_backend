@@ -34,6 +34,27 @@ exports.getPatients = (req, res) => {
     .catch((err) => res.status(500).json(err))
 }
 
+exports.getPatientsByQuery = (req, res) => {
+  Patient.find({
+    $or: [
+      { firstName: { $regex: req.query.input, $options: 'i' } },
+      { lastName: { $regex: req.query.input, $options: 'i' } },
+      { dni: { $regex: req.query.input, $options: 'i' } },
+      { 'contact.mobilephone': { $regex: req.query.input, $options: 'i' } },
+    ],
+  })
+    .limit(10)
+    .select({
+      _id: 1,
+      dni: 1,
+      firstName: 1,
+      lastName: 1,
+      'contact.mobilephone': 1,
+    })
+    .then((patients) => res.status(200).send(patients))
+    .catch((err) => res.status(500).json(err))
+}
+
 exports.getPatientById = (req, res) => {
   Patient.findById(req.params.patientId)
     .then((patient) => {
