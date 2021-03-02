@@ -22,31 +22,10 @@ exports.createPatient = (req, res) => {
 }
 
 exports.getPatients = (req, res) => {
+  // const { page = 1, limit = 10 } = req.query
+  // const count = await Patient.countDocuments()
+  // console.log('Number of documents in Patient colletion: ', count)
   Patient.find()
-    .select({
-      _id: 1,
-      dni: 1,
-      firstName: 1,
-      lastName: 1,
-      'contact.mobilephone': 1,
-    })
-    .then((patients) => res.status(200).send(patients))
-    .catch((err) => res.status(500).json(err))
-}
-
-exports.getPatientsByQuery = (req, res) => {
-  const { page = 1, limit = 10 } = req.query
-  console.log('limit', limit * 1)
-  console.log('page', (page - 1) * limit)
-  console.log('query')
-  Patient.find({
-    $or: [
-      { firstName: { $regex: req.query.input, $options: 'i' } },
-      { lastName: { $regex: req.query.input, $options: 'i' } },
-      { dni: { $regex: req.query.input, $options: 'i' } },
-      { 'contact.mobilephone': { $regex: req.query.input, $options: 'i' } },
-    ],
-  })
     // .limit(limit * 1)
     // .skip((page - 1) * limit)
     .select({
@@ -56,13 +35,43 @@ exports.getPatientsByQuery = (req, res) => {
       lastName: 1,
       'contact.mobilephone': 1,
     })
+    .then((patients) => res.send(patients))
+    // {
+    //   res.status(200)
+    //     .json({
+    //     patients: patients.slice((page - 1) * limit, page * limit),
+    //     totalPages: Math.ceil(count / limit),
+    //     currentPage: page,
+    //     totalPatients: count,
+    //   }
+    // })
+    .catch((err) => res.status(500).json(err))
+}
+
+exports.getPatientsByQuery = (req, res) => {
+  const { page = 1, limit = 10 } = req.query
+  Patient.find({
+    $or: [
+      { firstName: { $regex: req.query.input, $options: 'i' } },
+      { lastName: { $regex: req.query.input, $options: 'i' } },
+      { dni: { $regex: req.query.input, $options: 'i' } },
+      { 'contact.mobilephone': { $regex: req.query.input, $options: 'i' } },
+    ],
+  })
+    .select({
+      _id: 1,
+      dni: 1,
+      firstName: 1,
+      lastName: 1,
+      'contact.mobilephone': 1,
+    })
     .then((patients) => {
       const count = patients.length
-      console.log('patientssss', patients)
       res.status(200).json({
         patients: patients.slice((page - 1) * limit, page * limit),
         totalPages: Math.ceil(count / limit),
         currentPage: page,
+        totalPatients: count,
       })
     })
     .catch((err) => res.status(500).json(err))
