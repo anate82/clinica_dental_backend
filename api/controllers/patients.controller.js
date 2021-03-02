@@ -47,8 +47,8 @@ exports.getPatientsByQuery = (req, res) => {
       { 'contact.mobilephone': { $regex: req.query.input, $options: 'i' } },
     ],
   })
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
+    // .limit(limit * 1)
+    // .skip((page - 1) * limit)
     .select({
       _id: 1,
       dni: 1,
@@ -60,7 +60,10 @@ exports.getPatientsByQuery = (req, res) => {
       const count = patients.length
       console.log('patientssss', patients)
       res.status(200).json({
-        patients: patients,
+        patients: patients.slice(
+          (page - 1) * limit,
+          (page - 1) * limit + limit
+        ),
         totalPages: Math.ceil(count / limit),
         currentPage: page,
       })
