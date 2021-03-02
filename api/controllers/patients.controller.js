@@ -60,10 +60,7 @@ exports.getPatientsByQuery = (req, res) => {
       const count = patients.length
       console.log('patientssss', patients)
       res.status(200).json({
-        patients: patients.slice(
-          (page - 1) * limit,
-          (page - 1) * limit + limit
-        ),
+        patients: patients.slice((page - 1) * limit, page * limit),
         totalPages: Math.ceil(count / limit),
         currentPage: page,
       })
