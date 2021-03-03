@@ -3,7 +3,7 @@ const Employee = require('../models/employees.model')
 exports.createEmployee = (req, res) => {
   if (req.body) {
     Employee.create({
-      //dateOfEmployment y employed se crean default
+      //dateOfEmployment y employed se crean default por ahora
       occupation: req.body.occupation,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -37,7 +37,7 @@ exports.getEmployees = async (req, res) => {
     })
     .then((employees) =>
       res.status(200).json({
-        employees: employees.slice((page - 1) * limit, page * limit),
+        employees: employees,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
         total: count,
