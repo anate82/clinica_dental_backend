@@ -1,4 +1,5 @@
 const Patient = require('../models/patients.model')
+const ObjectId = require('mongodb').ObjectId
 
 exports.createPatient = (req, res) => {
   if (req.body) {
@@ -81,6 +82,18 @@ exports.getPatientById = (req, res) => {
   Patient.findById(req.params.patientId)
     .then((patient) => {
       res.status(200).send(patient)
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
+exports.addTreatmentToPatient = (req, res, treatmentId) => {
+  Patient.findById(req.body.patientId)
+    .then((patient) => {
+      patient.treatments.unshift(ObjectId(treatmentId))
+      patient.save(function (err) {
+        if (err) return res.status(500).send(err)
+        res.status(200).json(patient)
+      })
     })
     .catch((err) => res.status(500).json(err))
 }
