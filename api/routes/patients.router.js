@@ -11,6 +11,7 @@ const {
 router.get('/', getPatients)
 router.get('/search', getPatientsByQuery)
 router.get('/:patientId', getPatientById)
+router.get('/:patientId/treatments')
 
 router.post('/', createPatient)
 router.put('/:patientId', updatePatient)
