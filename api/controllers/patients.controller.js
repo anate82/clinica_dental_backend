@@ -100,7 +100,10 @@ exports.addTreatmentToPatient = (req, res, appointment, treatmentId) => {
 
 exports.getTreatmentsByPatientId = (req, res) => {
   Patient.findById(req.params.patientId)
-    .populate('treatments')
+    .populate({
+      path: 'treatments',
+      populate: { path: 'appointments' },
+    })
     .then((patient) => {
       res.status(200).send(patient)
     })
