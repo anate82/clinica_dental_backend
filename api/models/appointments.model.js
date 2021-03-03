@@ -34,6 +34,16 @@ const appointmentSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  treatment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'treatment',
+    required: false,
+  },
+  intervention: {
+    type: String,
+    required: true,
+    enum: ['Empaste', 'Ortodoncia', 'Endodoncia'],
+  },
 })
 
 const appointmentModel = mongoose.model('appointment', appointmentSchema)

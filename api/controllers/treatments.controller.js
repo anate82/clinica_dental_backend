@@ -1,23 +1,27 @@
 const Treatment = require('../models/treatments.model')
 const ObjectId = require('mongodb').ObjectId
+const { addTreatmentToPatient } = require('./patients.controller')
 
-exports.createTreatment = (req, res, id) => {
+exports.createTreatment = (req, res, appointment) => {
   if (req.body) {
     Treatment.create({
       patient: ObjectId(req.body.patientId),
-      description: req.body.description,
-      finished: req.body.finished,
       intervention: req.body.intervention,
-      appointments: [ObjectId(id)],
+      appointments: [ObjectId(appointment._id)],
+      finished: req.body.finished,
     })
       .then((treatment) => {
-        res.status(200).json(treatment)
+        console.log(
+          'treatment in createtreatment treatment.controller',
+          treatment
+        )
+        addTreatmentToPatient(req, res, appointment, treatment._id)
       })
       .catch((err) => res.status(500).json(err))
   }
 }
 
-exports.findTreatmentId = (req, res, id) => {
+exports.addApointmentToTreatment = (req, res, id) => {
   Treatment.findOne({ _id: req.body.treatmentId })
     .then((treatment) => {
       treatment.appointments.unshift(ObjectId(id))

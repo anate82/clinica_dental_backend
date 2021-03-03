@@ -1,29 +1,28 @@
 const Appointment = require('../models/appointments.model')
 const ObjectId = require('mongodb').ObjectId
 const {
-  findTreatmentId,
+  addApointmentToTreatment,
   createTreatment,
   deleteAppointmentTreatment,
 } = require('./treatments.controller')
-const { addTreatmentToPatient } = require('./patients.controller')
 
 exports.createAppointment = (req, res) => {
+  const employees = req.body.employees.map((employeeId) => ObjectId(employeeId))
   Appointment.create({
     patient: ObjectId(req.body.patientId),
+    employees: employees,
     start: req.body.start,
     end: req.body.end,
     piece: req.body.piece,
     observations: req.body.observations,
-    medication: req.body.medication,
+    intervention: req.body.intervention,
   })
     .then((appointment) => {
-      console.log('appointment', appointment)
       if (req.body.treatmentId) {
-        findTreatmentId(req, res, appointment._id)
+        addApointmentToTreatment(req, res, appointment._id)
       } else {
-        createTreatment(req, res, appointment._id)
+        createTreatment(req, res, appointment)
       }
-      addTreatmentToPatient(req, res, req.body.treatmentId)
     })
     .catch((err) => res.status(500).json(err))
 }

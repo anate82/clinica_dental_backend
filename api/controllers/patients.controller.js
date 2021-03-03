@@ -86,13 +86,13 @@ exports.getPatientById = (req, res) => {
     .catch((err) => res.status(500).json(err))
 }
 
-exports.addTreatmentToPatient = (req, res, treatmentId) => {
+exports.addTreatmentToPatient = (req, res, appointment, treatmentId) => {
   Patient.findById(req.body.patientId)
     .then((patient) => {
       patient.treatments.unshift(ObjectId(treatmentId))
       patient.save(function (err) {
         if (err) return res.status(500).send(err)
-        res.status(200).json(patient)
+        res.status(200).json(appointment)
       })
     })
     .catch((err) => res.status(500).json(err))
