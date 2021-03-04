@@ -5,10 +5,9 @@ const { addTreatmentToPatient } = require('./patients.controller')
 exports.createTreatment = (req, res, appointment) => {
   if (req.body) {
     Treatment.create({
-      patient: ObjectId(req.body.patientId),
+      patient: ObjectId(req.body.patient),
       intervention: req.body.intervention,
       appointments: [ObjectId(appointment._id)],
-      finished: req.body.finished,
     })
       .then((treatment) => {
         console.log(

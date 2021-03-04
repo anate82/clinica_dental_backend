@@ -53,6 +53,16 @@ exports.getemployeeById = (req, res) => {
     })
     .catch((err) => res.status(500).json(err))
 }
+exports.addAppointmentToEmployee = (req, res, employeeId, appointmentId) => {
+  Employee.findById(employeeId)
+    .then((employee) => {
+      employee.appointments.unshift(appointmentId)
+      employee.save(function (err) {
+        if (err) return res.status(500).send(err)
+      })
+    })
+    .catch((err) => res.status(500).json(err))
+}
 
 exports.updateEmployeeById = (req, res) => {
   Employee.findByIdAndUpdate(req.params.employeeId, req.body, {

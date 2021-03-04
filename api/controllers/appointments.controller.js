@@ -6,10 +6,23 @@ const {
   deleteAppointmentTreatment,
 } = require('./treatments.controller')
 
+const { addAppointmentToEmployee } = require('./employees.controller')
+
+exports.getAppointmentsDate = (req, res) => {
+  const today = Date.now()
+  const aMonthAgo = today.setMonth(today.getMonth() - 1)
+  Appointment.find({ start: { $gt: aMonthAgo } })
+    .select({ patient: 1, employees: 1, start: 1, end: 1, intervention: 1 })
+    .then((appointments) => {
+      res.status(200).json(appointments)
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
 exports.createAppointment = (req, res) => {
   const employees = req.body.employees.map((employeeId) => ObjectId(employeeId))
   Appointment.create({
-    patient: ObjectId(req.body.patientId),
+    patient: ObjectId(req.body.patient),
     employees: employees,
     start: req.body.start,
     end: req.body.end,
@@ -23,6 +36,9 @@ exports.createAppointment = (req, res) => {
       } else {
         createTreatment(req, res, appointment)
       }
+      employees.forEach((employee) => {
+        addAppointmentToEmployee(req, res, employee, appointment._id)
+      })
     })
     .catch((err) => res.status(500).json(err))
 }

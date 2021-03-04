@@ -87,7 +87,7 @@ exports.getPatientById = (req, res) => {
 }
 
 exports.addTreatmentToPatient = (req, res, appointment, treatmentId) => {
-  Patient.findById(req.body.patientId)
+  Patient.findById(req.body.patient)
     .then((patient) => {
       patient.treatments.unshift(ObjectId(treatmentId))
       patient.save(function (err) {
