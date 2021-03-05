@@ -21,9 +21,11 @@ const appointmentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  piece: {
-    type: Number,
-  },
+  pieces: [
+    {
+      type: Number,
+    },
+  ],
   observations: {
     type: String,
   },

@@ -32,10 +32,9 @@ exports.getAppointmentsDate = (req, res) => {
 }
 
 exports.getAppointmentById = (req, res) => {
-  console.log('entro al controlador')
   Appointment.findById(req.params.appointmentId)
+    .populate('patient')
     .then((appointment) => {
-      console.log(appointment)
       res.status(200).send(appointment)
     })
     .catch((err) => res.status(500).json(err))
@@ -48,7 +47,7 @@ exports.createAppointment = (req, res) => {
     employees: employees,
     start: req.body.start,
     end: req.body.end,
-    piece: req.body.piece,
+    pieces: req.body.pieces,
     observations: req.body.observations,
     intervention: req.body.intervention,
   })
