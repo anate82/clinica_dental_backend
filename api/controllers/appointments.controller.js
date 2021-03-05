@@ -9,13 +9,34 @@ const {
 const { addAppointmentToEmployee } = require('./employees.controller')
 
 exports.getAppointmentsDate = (req, res) => {
+  console.log('entro al controlador')
   const today = new Date(Date.now())
-  const aMonthAgo = today.setMonth(today.getMonth() - 1)
-  Appointment.find({ start: { $gt: aMonthAgo } })
+  const aMonthAgo = new Date(today)
+  aMonthAgo.setDate(today.getDate() - 31)
+  const year = aMonthAgo.getFullYear()
+  const month = (aMonthAgo.getMonth() + 1).toLocaleString('en-US', {
+    minimumIntegerDigits: 2,
+  })
+  const day = aMonthAgo.getDate().toLocaleString('en-US', {
+    minimumIntegerDigits: 2,
+  })
+  console.log(`${year}-${month}-${day} 00:00`)
+  Appointment.find({ start: { $gt: `${year}-${month}-${day} 00:00` } })
     .populate('employees')
     .select({ patient: 1, employees: 1, start: 1, end: 1, intervention: 1 })
     .then((appointments) => {
+      console.log(appointments)
       res.status(200).json(appointments)
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
+exports.getAppointmentById = (req, res) => {
+  console.log('entro al controlador')
+  Appointment.findById(req.params.appointmentId)
+    .then((appointment) => {
+      console.log(appointment)
+      res.status(200).send(appointment)
     })
     .catch((err) => res.status(500).json(err))
 }
