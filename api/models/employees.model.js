@@ -60,6 +60,10 @@ const employeeSchema = new mongoose.Schema({
       ref: 'appointment',
     },
   ],
+  color: {
+    type: String,
+    required: true,
+  },
 })
 
 const employeeModel = mongoose.model('employee', employeeSchema)

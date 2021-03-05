@@ -14,6 +14,7 @@ exports.createEmployee = (req, res) => {
         mobilephone: req.body.mobilephone,
         telephone: req.body.telephone,
       },
+      color: req.body.color,
     })
       .then((employee) => {
         res.status(200).send(employee)
@@ -34,6 +35,7 @@ exports.getEmployees = async (req, res) => {
       firstName: 1,
       lastName: 1,
       'contact.mobilephone': 1,
+      color: 1,
     })
     .then((employees) =>
       res.status(200).json({

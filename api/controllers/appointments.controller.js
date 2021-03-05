@@ -9,9 +9,10 @@ const {
 const { addAppointmentToEmployee } = require('./employees.controller')
 
 exports.getAppointmentsDate = (req, res) => {
-  const today = Date.now()
+  const today = new Date(Date.now())
   const aMonthAgo = today.setMonth(today.getMonth() - 1)
   Appointment.find({ start: { $gt: aMonthAgo } })
+    .populate('employees')
     .select({ patient: 1, employees: 1, start: 1, end: 1, intervention: 1 })
     .then((appointments) => {
       res.status(200).json(appointments)
