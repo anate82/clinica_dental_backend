@@ -1,29 +1,25 @@
 const Treatment = require('../models/treatments.model')
 const ObjectId = require('mongodb').ObjectId
+
 const { addTreatmentToPatient } = require('./patients.controller')
 
-exports.createTreatment = (req, res, appointment) => {
-  if (req.body) {
-    Treatment.create({
-      patient: ObjectId(req.body.patient),
-      intervention: req.body.intervention,
-      appointments: [ObjectId(appointment._id)],
+exports.createTreatment = (req, res) => {
+  Treatment.create({
+    patient: ObjectId(req.body.patient),
+    intervention: req.body.intervention,
+    appointments: [],
+  })
+    .then((treatment) => {
+      console.log('treatment en treatment controller', treatment)
+      addTreatmentToPatient(req, res, treatment)
     })
-      .then((treatment) => {
-        console.log(
-          'treatment in createtreatment treatment.controller',
-          treatment
-        )
-        addTreatmentToPatient(req, res, appointment, treatment._id)
-      })
-      .catch((err) => res.status(500).json(err))
-  }
+    .catch((err) => res.status(500).json(err))
 }
 
-exports.addApointmentToTreatment = (req, res, id) => {
+exports.addApointmentToTreatment = (req, res, appointmentId) => {
   Treatment.findOne({ _id: req.body.treatmentId })
     .then((treatment) => {
-      treatment.appointments.unshift(ObjectId(id))
+      treatment.appointments.unshift(ObjectId(appointmentId))
       treatment.save(function (err) {
         if (err) return res.status(500).send(err)
         res.status(200).json(treatment)

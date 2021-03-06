@@ -3,10 +3,10 @@ const router = require('express').Router()
 const {
   createPatient,
   getPatients,
-  updatePatient,
   getPatientById,
   getPatientsByQuery,
   getTreatmentsByPatientId,
+  updatePatient,
 } = require('../controllers/patients.controller')
 
 router.get('/', getPatients)
