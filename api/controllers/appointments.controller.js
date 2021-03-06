@@ -31,6 +31,66 @@ exports.getAppointmentsDate = (req, res) => {
     .catch((err) => res.status(500).json(err))
 }
 
+exports.getAppointments = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query
+
+  const count = await Appointment.countDocuments()
+  console.log('Number of documents in Appointment colletion: ', count)
+  Appointment.find()
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .populate('patient', 'firstName')
+    .populate('employees', 'firstName')
+    .select({
+      _id: 1,
+      intervention: 1,
+      patient: 1,
+      employees: 1,
+      start: 1,
+    })
+    .then((appointments) => {
+      res.status(200).json({
+        appointments: appointments,
+        totalPages: Math.ceil(count / limit),
+        page: page,
+        totalAppointments: count,
+      })
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
+exports.getAppointmentsByQuery = (req, res) => {
+  const { page = 1, limit = 10 } = req.query
+  Appointment.find({
+    $or: [
+      { intervention: { $regex: req.query.input, $options: 'i' } },
+      { 'patient.firstName': { $regex: req.query.input, $options: 'i' } },
+      {
+        'employees[0].firstName': { $regex: req.query.input, $options: 'i' },
+      },
+    ],
+  })
+    .populate('patient', 'firstName')
+    .populate('employees', 'firstName')
+    .select({
+      _id: 1,
+      intervention: 1,
+      patient: 1,
+      employees: 1,
+      start: 1,
+    })
+    .then((appointments) => {
+      const count = appointments.length
+      res.status(200).json({
+        appointments: appointments.slice((page - 1) * limit, page * limit),
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+        totalPatients: count,
+      })
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
 exports.getAppointmentById = (req, res) => {
   Appointment.findById(req.params.appointmentId)
     .populate('patient')

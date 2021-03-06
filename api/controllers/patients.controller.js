@@ -22,13 +22,14 @@ exports.createPatient = (req, res) => {
   }
 }
 
-exports.getPatients = (req, res) => {
-  // const { page = 1, limit = 10 } = req.query
-  // const count = await Patient.countDocuments()
-  // console.log('Number of documents in Patient colletion: ', count)
+exports.getPatients = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query
+
+  const count = await Patient.countDocuments()
+  console.log('Number of documents in Patient colletion: ', count)
   Patient.find()
-    // .limit(limit * 1)
-    // .skip((page - 1) * limit)
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
     .select({
       _id: 1,
       dni: 1,
@@ -36,16 +37,14 @@ exports.getPatients = (req, res) => {
       lastName: 1,
       'contact.mobilephone': 1,
     })
-    .then((patients) => res.send(patients))
-    // {
-    //   res.status(200)
-    //     .json({
-    //     patients: patients.slice((page - 1) * limit, page * limit),
-    //     totalPages: Math.ceil(count / limit),
-    //     currentPage: page,
-    //     totalPatients: count,
-    //   }
-    // })
+    .then((patients) => {
+      res.status(200).json({
+        patients: patients,
+        totalPages: Math.ceil(count / limit),
+        page: page,
+        totalPatients: count,
+      })
+    })
     .catch((err) => res.status(500).json(err))
 }
 
