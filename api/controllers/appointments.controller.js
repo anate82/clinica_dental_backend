@@ -2,11 +2,8 @@ const Appointment = require('../models/appointments.model')
 const ObjectId = require('mongodb').ObjectId
 const {
   addApointmentToTreatment,
-  createTreatment,
   deleteAppointmentTreatment,
 } = require('./treatments.controller')
-
-const { addAppointmentToEmployee } = require('./employees.controller')
 
 exports.getAppointmentsDate = (req, res) => {
   console.log('entro al controlador')
@@ -100,6 +97,7 @@ exports.getAppointmentById = (req, res) => {
     .catch((err) => res.status(500).json(err))
 }
 
+//Endpoint para cita sobre un tratamiento existente
 exports.createAppointment = (req, res) => {
   const employees = req.body.employees.map((employeeId) => ObjectId(employeeId))
   Appointment.create({
@@ -110,16 +108,10 @@ exports.createAppointment = (req, res) => {
     pieces: req.body.pieces,
     observations: req.body.observations,
     intervention: req.body.intervention,
+    treatment: req.body.treatmentId,
   })
     .then((appointment) => {
-      if (req.body.treatmentId) {
-        addApointmentToTreatment(req, res, appointment._id)
-      } else {
-        createTreatment(req, res, appointment)
-      }
-      employees.forEach((employee) => {
-        addAppointmentToEmployee(req, res, employee, appointment._id)
-      })
+      addApointmentToTreatment(req, res, appointment._id)
     })
     .catch((err) => res.status(500).json(err))
 }

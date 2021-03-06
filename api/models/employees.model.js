@@ -54,12 +54,6 @@ const employeeSchema = new mongoose.Schema({
     // },
   },
   contact: contactSchema,
-  appointments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'appointment',
-    },
-  ],
   color: {
     type: String,
     required: true,
