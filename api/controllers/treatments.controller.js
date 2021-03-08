@@ -5,8 +5,9 @@ const { addTreatmentToPatient } = require('./patients.controller')
 
 exports.createTreatment = (req, res) => {
   Treatment.create({
-    patient: ObjectId(req.body.patient),
+    patient: req.body.patient,
     intervention: req.body.intervention,
+    interventionSubtype: req.body.interventionSubtype,
     appointments: [],
   })
     .then((treatment) => {
@@ -17,9 +18,10 @@ exports.createTreatment = (req, res) => {
 }
 
 exports.addApointmentToTreatment = (req, res, appointmentId) => {
-  Treatment.findOne({ _id: req.body.treatmentId })
+  Treatment.findOne({ _id: ObjectId(req.body.treatmentId) })
     .then((treatment) => {
-      treatment.appointments.unshift(ObjectId(appointmentId))
+      console.log(treatment)
+      treatment.appointments.unshift(appointmentId)
       treatment.save(function (err) {
         if (err) return res.status(500).send(err)
         res.status(200).json(treatment)

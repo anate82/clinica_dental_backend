@@ -82,7 +82,7 @@ exports.getAppointmentsByQuery = (req, res) => {
         appointments: appointments.slice((page - 1) * limit, page * limit),
         totalPages: Math.ceil(count / limit),
         currentPage: page,
-        totalPatients: count,
+        totalAppointments: count,
       })
     })
     .catch((err) => res.status(500).json(err))
@@ -101,7 +101,7 @@ exports.getAppointmentById = (req, res) => {
 exports.createAppointment = (req, res) => {
   const employees = req.body.employees.map((employeeId) => ObjectId(employeeId))
   Appointment.create({
-    patient: ObjectId(req.body.patient),
+    patient: req.body.patient,
     employees: employees,
     start: req.body.start,
     end: req.body.end,
