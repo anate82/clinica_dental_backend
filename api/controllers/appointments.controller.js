@@ -96,6 +96,17 @@ exports.getAppointmentById = (req, res) => {
     })
     .catch((err) => res.status(500).json(err))
 }
+exports.getAppointmentsByPatient = (req, res) => {
+  Appointment.find({
+    $and: [{ patient: req.params.patientId }, { finished: false }],
+  })
+    .populate('employees', ['firstName', 'lastName'])
+    .then((appointments) => {
+      console.log(appointments)
+      res.status(200).send(appointments)
+    })
+    .catch((err) => res.status(500).json(err))
+}
 
 //Endpoint para cita sobre un tratamiento existente
 exports.createAppointment = (req, res) => {
