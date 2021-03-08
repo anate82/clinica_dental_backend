@@ -44,7 +44,20 @@ const appointmentSchema = new mongoose.Schema({
   intervention: {
     type: String,
     required: true,
-    enum: ['Empaste', 'Ortodoncia', 'Endodoncia'],
+    enum: [
+      'Prótesis híbridas',
+      'Prótesis mini híbrida',
+      'Prótesis locator',
+      'Prótesis fija',
+      'Prótesis removible',
+      'Ferulas',
+      'Limpiezas',
+      'Obturaciones',
+      'Endodoncia',
+      'Cirugía',
+      'Ortodoncia',
+      'Radiografía',
+    ],
   },
 })
 
