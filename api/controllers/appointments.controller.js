@@ -38,13 +38,6 @@ exports.getAppointments = async (req, res) => {
     .skip((page - 1) * limit)
     .populate('patient', 'firstName')
     .populate('employees', 'firstName')
-    .select({
-      _id: 1,
-      intervention: 1,
-      patient: 1,
-      employees: 1,
-      start: 1,
-    })
     .then((appointments) => {
       res.status(200).json({
         appointments: appointments,
@@ -91,6 +84,8 @@ exports.getAppointmentsByQuery = (req, res) => {
 exports.getAppointmentById = (req, res) => {
   Appointment.findById(req.params.appointmentId)
     .populate('patient')
+    .populate('employees')
+    .populate('treatment')
     .then((appointment) => {
       res.status(200).send(appointment)
     })

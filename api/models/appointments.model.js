@@ -39,7 +39,6 @@ const appointmentSchema = new mongoose.Schema({
   treatment: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'treatment',
-    required: false,
   },
   intervention: {
     type: String,
