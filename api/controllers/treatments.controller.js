@@ -16,6 +16,22 @@ exports.createTreatment = (req, res) => {
     })
     .catch((err) => res.status(500).json(err))
 }
+exports.getFinishedTreatmentByPatient = (req, res) => {
+  Treatment.find({
+    $and: [{ patient: req.params.patientId }, { finished: true }],
+  })
+    .populate({
+      path: 'appointments',
+      options: { sort: '-start' },
+      populate: { path: 'employees' },
+    })
+    .limit(5)
+    .then((treatment) => {
+      console.log(treatment)
+      res.status(200).json(treatment)
+    })
+    .catch((err) => res.status(500).json(err))
+}
 
 exports.addApointmentToTreatment = (req, res, appointmentId) => {
   Treatment.findOne({ _id: ObjectId(req.body.treatmentId) })
