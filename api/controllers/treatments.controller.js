@@ -38,9 +38,9 @@ const deleteTreatment = (req, res, id) => {
     .catch((err) => console.log(err))
 }
 
-exports.deleteAppointmentTreatment = (req, res, id) => {
-  Treatment.findOne({ _id: req.body.treatmentId }).then((treatment) => {
-    let idx = treatment.appointments.indexOf(id)
+exports.deleteAppointmentTreatment = (req, res, appointment) => {
+  Treatment.findOne({ _id: appointment.treatment }).then((treatment) => {
+    let idx = treatment.appointments.indexOf(appointment._id)
     treatment.appointments.splice(idx, 1)
     treatment.save(function (err) {
       if (err) return res.status(500).send(err)
@@ -53,6 +53,8 @@ exports.deleteAppointmentTreatment = (req, res, id) => {
 }
 
 exports.updateTreatment = (req, res) => {
+  console.log(req.params)
+  console.log(req.body)
   Treatment.findByIdAndUpdate(req.params.treatmentId, req.body, {
     new: true,
     runValidators: true,
