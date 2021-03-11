@@ -125,7 +125,11 @@ exports.createAppointment = (req, res) => {
 }
 
 exports.updateAppointment = (req, res) => {
-  Appointment.findByIdAndUpdate(req.params.appointmentId, req.body)
+  Appointment.findByIdAndUpdate(req.params.appointmentId, req.body, {
+    new: true,
+    runValidators: true,
+    omitUndefined: true,
+  })
     .then((appointment) => {
       res.status(200).send(appointment)
     })

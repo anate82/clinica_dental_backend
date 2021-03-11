@@ -67,3 +67,15 @@ exports.deleteAppointmentTreatment = (req, res, id) => {
     })
   })
 }
+
+exports.updateTreatment = (req, res) => {
+  Treatment.findByIdAndUpdate(req.params.treatmentId, req.body, {
+    new: true,
+    runValidators: true,
+    omitUndefined: true,
+  })
+    .then((treatment) => {
+      res.status(200).send(treatment)
+    })
+    .catch((err) => res.status(500).json(err))
+}
