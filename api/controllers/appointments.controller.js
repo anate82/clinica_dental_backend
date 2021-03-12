@@ -130,6 +130,9 @@ exports.updateAppointment = (req, res) => {
     runValidators: true,
     omitUndefined: true,
   })
+    .populate('patient')
+    .populate('employees')
+    .populate('treatment')
     .then((appointment) => {
       res.status(200).send(appointment)
     })
@@ -139,7 +142,7 @@ exports.updateAppointment = (req, res) => {
 exports.deleteAppointment = (req, res) => {
   Appointment.findByIdAndDelete(req.params.appointmentId)
     .then((appointment) => {
-      deleteAppointmentTreatment(req, res, appointment._id)
+      deleteAppointmentTreatment(req, res, appointment)
     })
     .catch((err) => console.log(err))
 }
