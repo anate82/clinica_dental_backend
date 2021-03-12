@@ -22,6 +22,29 @@ exports.createEmployee = (req, res) => {
       .catch((err) => res.status(500).json(err))
   }
 }
+exports.getEmployeesByQuery = (req, res) => {
+  const { page = 1, limit = 10 } = req.query
+  Employee.find({
+    $or: [
+      { dni: { $regex: req.query.input, $options: 'i' } },
+      { firstName: { $regex: req.query.input, $options: 'i' } },
+      {
+        lastName: { $regex: req.query.input, $options: 'i' },
+      },
+      { 'contact.mobilephone': { $regex: req.query.input, $options: 'i' } },
+    ],
+  })
+    .then((employees) => {
+      const count = employees.length
+      res.status(200).json({
+        employees: employees.slice((page - 1) * limit, page * limit),
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+        totalEmployees: count,
+      })
+    })
+    .catch((err) => res.status(500).json(err))
+}
 
 exports.getEmployees = async (req, res) => {
   const { page = 1, limit = 10 } = req.query
