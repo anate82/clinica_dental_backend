@@ -1,7 +1,6 @@
 const router = require('express').Router()
 
 const {
-  // getEmployees,
   createEmployee,
   getEmployees,
   getemployeeById,

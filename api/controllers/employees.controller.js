@@ -35,6 +35,7 @@ exports.getEmployeesByQuery = (req, res) => {
     ],
   })
     .then((employees) => {
+      console.log('controller', employees)
       const count = employees.length
       res.status(200).json({
         employees: employees.slice((page - 1) * limit, page * limit),
@@ -57,6 +58,8 @@ exports.getEmployees = async (req, res) => {
       dni: 1,
       firstName: 1,
       lastName: 1,
+      occupation: 1,
+      employed: 1,
       'contact.mobilephone': 1,
       color: 1,
     })
@@ -80,12 +83,15 @@ exports.getemployeeById = (req, res) => {
 }
 
 exports.updateEmployeeById = (req, res) => {
+  console.log('req.body', req.body)
+  console.log('req.params.employeeId', req.params.employeeId)
   Employee.findByIdAndUpdate(req.params.employeeId, req.body, {
     new: true,
     runValidators: true,
     omitUndefined: true,
   })
     .then((employee) => {
+      console.log('update', employee)
       res.status(200).json(employee)
     })
     .catch((err) => res.status(500).json(err))
