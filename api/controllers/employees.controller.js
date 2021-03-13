@@ -22,6 +22,17 @@ exports.createEmployee = (req, res) => {
       .catch((err) => res.status(500).json(err))
   }
 }
+
+exports.getMe = (req, res) => {
+  console.log(req.body)
+  console.log(res.locals)
+  Employee.findById(req.params.employeeId)
+    .then((me) => {
+      res.status(200).send(me)
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
 exports.getEmployeesByQuery = (req, res) => {
   const { page = 1, limit = 10 } = req.query
   Employee.find({

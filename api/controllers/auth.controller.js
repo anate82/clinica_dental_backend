@@ -16,11 +16,15 @@ exports.signUp = (req, res) => {
         mobilephone: req.body.mobilephone,
         telephone: req.body.telephone,
       },
+      color: req.body.color,
     })
       .then((employee) => {
-        const data = { email: employee.email, name: employee.firstName }
+        const data = {
+          email: employee.email,
+          name: `${employee.firstName} ${employee.lastName}`,
+          employeeId: employee._id,
+        }
         const token = jwt.sign(data, process.env.SECRET)
-
         res.status(200).json({ token: token, ...data })
       })
       .catch((err) => res.status(500).send(err))
@@ -35,14 +39,16 @@ exports.logIn = (req, res) => {
       _id: 1,
       password: 1,
       firstName: 1,
+      lastName: 1,
       'contact.email': 1,
     })
     .then((employee) => {
       if (employee) {
         if (bcrypt.compareSync(req.body.password, employee.password)) {
+          console.log(employee)
           const data = {
             email: employee.contact.email,
-            firstName: employee.firstName,
+            name: `${employee.firstName} ${employee.lastName}`,
             employeeId: employee._id,
           }
           const token = jwt.sign(data, process.env.SECRET)
