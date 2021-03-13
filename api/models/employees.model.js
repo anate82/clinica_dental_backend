@@ -3,8 +3,7 @@ const contactSchema = require('./contact.model').schema
 
 const employeeSchema = new mongoose.Schema({
   dateOfEmployment: {
-    type: Date,
-    default: Date.now(),
+    type: String,
   },
   employed: {
     type: Boolean,
@@ -42,7 +41,6 @@ const employeeSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false,
     //Minimum eight characters, at least one upper case English letter, one lower case English letter, one number and one special character
     // validate: {
     //   validator: function (v) {
