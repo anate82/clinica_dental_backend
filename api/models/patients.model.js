@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const contactSchema = require('./contact.model').schema
+const fileSchema = require('./file.model').schema
 
 const patientSchema = new mongoose.Schema({
   dateIn: {
@@ -50,6 +51,7 @@ const patientSchema = new mongoose.Schema({
       required: false,
     },
   ],
+  files: [fileSchema],
 })
 
 const patientModel = mongoose.model('patient', patientSchema)

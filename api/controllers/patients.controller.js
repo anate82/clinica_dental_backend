@@ -127,3 +127,37 @@ exports.updatePatient = (req, res) => {
     })
     .catch((err) => res.status(500).json(err))
 }
+
+//Files
+exports.addFileToPatient = (req, res) => {
+  console.log(' entra al back')
+  console.log(req.params.patientId)
+  const file = {
+    url: req.body.url,
+    type: req.body.type,
+  }
+
+  Patient.findById(req.params.patientId)
+    .then((patient) => {
+      console.log('file', file)
+      console.log('patient', patient)
+      patient.files.unshift(file)
+      console.log('hola')
+      patient.save(function (err) {
+        if (err) return res.status(500).send(err)
+        res.status(200).json(patient)
+      })
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
+exports.deleteFileFromPatient = (req, res) => {
+  Patient.findbyId(req.body.patientId).then((patient) => {
+    let idx = patient.files.indexOf(req.body.fileId)
+    patient.files.splice(idx, 1)
+    patient.save(function (err) {
+      if (err) return res.status(500).send(err)
+      res.status(200).json(patient)
+    })
+  })
+}
