@@ -33,6 +33,47 @@ exports.getFinishedTreatmentByPatient = (req, res) => {
     .catch((err) => res.status(500).json(err))
 }
 
+exports.getPatientTreatments = (req, res) => {
+  Treatment.find({ patient: req.params.patientId })
+    .populate({
+      path: 'appointments',
+      populate: { path: 'employees' },
+    })
+    .then((treatments) => {
+      res.status(200).send(treatments)
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
+exports.getPatientTreatmentsByQuery = (req, res) => {
+  Treatment.find({
+    $and: [
+      {
+        patient: req.params.patientId,
+      },
+      {
+        $or: [
+          { intervention: { $regex: req.query.input, $options: 'i' } },
+          // {
+          //   'appointments[0].employees[0].firstName': {
+          //     $regex: req.query.input,
+          //     $options: 'i',
+          //   },
+          // },
+        ],
+      },
+    ],
+  })
+    .populate({
+      path: 'appointments',
+      populate: { path: 'employees' },
+    })
+    .then((treatments) => {
+      res.status(200).send(treatments)
+    })
+    .catch((err) => res.status(500).json(err))
+}
+
 exports.addApointmentToTreatment = (req, res, appointmentId) => {
   Treatment.findOne({ _id: ObjectId(req.body.treatmentId) })
     .then((treatment) => {
