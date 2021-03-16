@@ -6,6 +6,7 @@ const {
   getEmployeesByQuery,
   getemployeeById,
   createEmployee,
+  updatePasswordById,
   updateEmployeeById,
 } = require('../controllers/employees.controller')
 
@@ -17,5 +18,6 @@ router.get('/search', getEmployeesByQuery)
 router.get('/:employeeId', getemployeeById)
 router.post('/', createEmployee)
 router.put('/:employeeId', updateEmployeeById)
+router.put('/:employeeId/password', updatePasswordById)
 
 module.exports = router

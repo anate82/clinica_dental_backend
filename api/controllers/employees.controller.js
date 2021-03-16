@@ -1,14 +1,16 @@
 const Employee = require('../models/employees.model')
+const bcrypt = require('bcrypt')
 
 exports.createEmployee = (req, res) => {
   if (req.body) {
+    const encryptedPasswd = bcrypt.hashSync(req.body.password, 10)
     Employee.create({
       //dateOfEmployment y employed se crean default por ahora
       occupation: req.body.occupation,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       dni: req.body.dni,
-      password: req.body.password,
+      password: encryptedPasswd,
       contact: {
         email: req.body.email,
         mobilephone: req.body.mobilephone,
@@ -92,15 +94,49 @@ exports.getemployeeById = (req, res) => {
     })
     .catch((err) => res.status(500).json(err))
 }
+exports.updatePasswordById = (req, res) => {
+  const encryptedPasswd = bcrypt.hashSync(req.body.password, 10)
+  Employee.findByIdAndUpdate(
+    req.params.employeeId,
+    {
+      password: encryptedPasswd,
+    },
+    {
+      new: true,
+      runValidators: true,
+      omitUndefined: true,
+    }
+  )
+    .then((employee) => {
+      console.log('update', employee)
+      res.status(200).json(employee)
+    })
+    .catch((err) => res.status(500).json(err))
+}
 
 exports.updateEmployeeById = (req, res) => {
-  console.log('req.body', req.body)
-  console.log('req.params.employeeId', req.params.employeeId)
-  Employee.findByIdAndUpdate(req.params.employeeId, req.body, {
-    new: true,
-    runValidators: true,
-    omitUndefined: true,
-  })
+  Employee.findByIdAndUpdate(
+    req.params.employeeId,
+    {
+      firstName: req.body.firstName,
+      dateOfEmployment: req.body.dateOfEmployment,
+      lastName: req.body.lastName,
+      occupation: req.body.occupation,
+      dni: req.body.dni,
+      contact: {
+        email: req.body.email,
+        mobilephone: req.body.mobilephone,
+        telephone: req.body.telephone,
+      },
+      color: req.body.color,
+      employed: req.body.employed,
+    },
+    {
+      new: true,
+      runValidators: true,
+      omitUndefined: true,
+    }
+  )
     .then((employee) => {
       console.log('update', employee)
       res.status(200).json(employee)

@@ -17,9 +17,7 @@ exports.createTreatment = (req, res) => {
     .catch((err) => res.status(500).json(err))
 }
 exports.getFinishedTreatmentByPatient = (req, res) => {
-  Treatment.find({
-    $and: [{ patient: req.params.patientId }, { finished: true }],
-  })
+  Treatment.find({ patient: req.params.patientId })
     .populate({
       path: 'appointments',
       options: { sort: '-start' },
