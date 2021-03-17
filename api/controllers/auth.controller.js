@@ -32,6 +32,7 @@ exports.signUp = (req, res) => {
 }
 
 exports.logIn = (req, res) => {
+  console.log('hola')
   Employee.findOne({
     'contact.email': req.body.email,
   })
