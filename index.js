@@ -28,7 +28,7 @@ mongoose.connect(
 
 // ADDING MIDDLEWARES & ROUTER
 const app = express()
-  .use(cors({ origin: 'https://dentalgestion.netlify.app' }))
+  .use(cors())
   .use(morgan('combined'))
   .use(express.json())
   .use(express.static(path.join(__dirname, 'public')))
