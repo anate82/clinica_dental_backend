@@ -26,7 +26,6 @@ exports.getPatients = async (req, res) => {
   const { page = 1, limit = 10 } = req.query
 
   const count = await Patient.countDocuments()
-  console.log('Number of documents in Patient colletion: ', count)
   Patient.find()
     .limit(limit * 1)
     .skip((page - 1) * limit)
