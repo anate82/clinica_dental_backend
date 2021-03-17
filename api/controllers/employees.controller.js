@@ -6,6 +6,7 @@ exports.createEmployee = (req, res) => {
     const encryptedPasswd = bcrypt.hashSync(req.body.password, 10)
     Employee.create({
       //dateOfEmployment y employed se crean default por ahora
+      dateOfEmployment: req.body.dateOfEmployment,
       occupation: req.body.occupation,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
