@@ -31,7 +31,7 @@ const app = express()
   .use(cors())
   .use(morgan('combined'))
   .use(express.json())
-  .use(express.static(path.join(__dirname, 'public')))
+  //.use(express.static(path.join(__dirname, 'public')))
   .use('/api', require('./api/routes/index'))
 
 // Init server
