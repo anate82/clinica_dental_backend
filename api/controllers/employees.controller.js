@@ -126,6 +126,10 @@ exports.updateEmployeeById = (req, res) => {
       },
       color: req.body.color,
       employed: req.body.employed,
+      avatar: {
+        url: req.body.url,
+        downloadurl: req.body.downloadurl,
+      },
     },
     {
       new: true,
