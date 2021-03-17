@@ -6,7 +6,7 @@ const cors = require('cors')
 // const helmet = require("helmet");
 const mongoose = require('mongoose')
 const morgan = require('morgan')
-//const path = require('path')
+const path = require('path')
 
 // NONGOOSE
 mongoose.connect(
@@ -28,10 +28,10 @@ mongoose.connect(
 
 // ADDING MIDDLEWARES & ROUTER
 const app = express()
-  .use(cors())
+  .use(cors({ origin: 'https://dentalgestion.netlify.app' }))
   .use(morgan('combined'))
   .use(express.json())
-  //.use(express.static(path.join(__dirname, 'public')))
+  .use(express.static(path.join(__dirname, 'public')))
   .use('/api', require('./api/routes/index'))
 
 // Init server
