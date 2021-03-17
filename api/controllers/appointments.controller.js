@@ -94,7 +94,6 @@ exports.getAppointmentsByPatient = (req, res) => {
   })
     .populate('employees', ['firstName', 'lastName'])
     .then((appointments) => {
-      console.log(appointments)
       res.status(200).send(appointments)
     })
     .catch((err) => res.status(500).json(err))
@@ -102,7 +101,6 @@ exports.getAppointmentsByPatient = (req, res) => {
 
 //Endpoint para cita sobre un tratamiento existente
 exports.createAppointment = (req, res) => {
-  console.log(req.body)
   const employees = req.body.employees.map((employeeId) => ObjectId(employeeId))
   Appointment.create({
     patient: req.body.patient,
@@ -115,7 +113,6 @@ exports.createAppointment = (req, res) => {
     treatment: req.body.treatmentId,
   })
     .then((appointment) => {
-      console.log('appointment', appointment)
       addApointmentToTreatment(req, res, appointment._id)
     })
     .catch((err) => res.status(500).json(err))

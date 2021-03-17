@@ -26,8 +26,6 @@ exports.createEmployee = (req, res) => {
 }
 
 exports.getMe = (req, res) => {
-  console.log(req.body)
-  console.log(res.locals)
   Employee.findById(req.params.employeeId)
     .then((me) => {
       res.status(200).send(me)
@@ -48,7 +46,6 @@ exports.getEmployeesByQuery = (req, res) => {
     ],
   })
     .then((employees) => {
-      console.log('controller', employees)
       const count = employees.length
       res.status(200).json({
         employees: employees.slice((page - 1) * limit, page * limit),
@@ -108,7 +105,6 @@ exports.updatePasswordById = (req, res) => {
     }
   )
     .then((employee) => {
-      console.log('update', employee)
       res.status(200).json(employee)
     })
     .catch((err) => res.status(500).json(err))
@@ -138,7 +134,6 @@ exports.updateEmployeeById = (req, res) => {
     }
   )
     .then((employee) => {
-      console.log('update', employee)
       res.status(200).json(employee)
     })
     .catch((err) => res.status(500).json(err))

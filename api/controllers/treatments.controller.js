@@ -11,7 +11,6 @@ exports.createTreatment = (req, res) => {
     appointments: [],
   })
     .then((treatment) => {
-      console.log('treatment en treatment controller', treatment)
       addTreatmentToPatient(req, res, treatment)
     })
     .catch((err) => res.status(500).json(err))
@@ -25,7 +24,6 @@ exports.getFinishedTreatmentByPatient = (req, res) => {
     })
     .limit(5)
     .then((treatment) => {
-      console.log(treatment)
       res.status(200).json(treatment)
     })
     .catch((err) => res.status(500).json(err))
@@ -75,7 +73,6 @@ exports.getPatientTreatmentsByQuery = (req, res) => {
 exports.addApointmentToTreatment = (req, res, appointmentId) => {
   Treatment.findOne({ _id: ObjectId(req.body.treatmentId) })
     .then((treatment) => {
-      console.log(treatment)
       treatment.appointments.unshift(appointmentId)
       treatment.save(function (err) {
         if (err) return res.status(500).send(err)
@@ -108,8 +105,6 @@ exports.deleteAppointmentTreatment = (req, res, appointment) => {
 }
 
 exports.updateTreatment = (req, res) => {
-  console.log(req.params)
-  console.log(req.body)
   Treatment.findByIdAndUpdate(req.params.treatmentId, req.body, {
     new: true,
     runValidators: true,
