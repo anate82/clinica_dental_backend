@@ -72,6 +72,8 @@ exports.getEmployees = async (req, res) => {
       occupation: 1,
       employed: 1,
       'contact.mobilephone': 1,
+      'contact.email': 1,
+      'contact.telephone': 1,
       color: 1,
     })
     .then((employees) =>
